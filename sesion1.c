@@ -8,13 +8,27 @@
 int calcular_longitud(int num);
 double elevar(int num1, int num2);
 
-int main(){
+int main(int argc, char* argv[]){
 	printf("Hola men\n");
 	int hijo1, hijo2, hijo3, hijo4;
 	float somnolencia;
 	int mi_pid, longitud;
 	double dividir;
+	key_t clave1, clave2;
+	int semaforo;
 
+	struct sembuf semOpc;
+
+	/*Creo los semaforos */
+	clave1 = ftok(argv[0], 'G');
+	printf("La clave es: %d", clave1);
+	semaforo = semget(clave1, 1, IPC_CREAT | 0600);
+
+	semOpc.sem_num = 0;
+	semOpc.sem_op = 0;
+	semOpc.sem_flag = 0;
+
+	semop(semaforo, semOpc, );
 
 	hijo1 = fork();
 	switch(hijo1){
@@ -24,13 +38,10 @@ int main(){
 		case 0:
 			/*Hijo 1*/
 			mi_pid = getpid();
-			/*longitud = calcular_longitud(mi_pid);
-			dividir = elevar(10, longitud);
-
-			printf("dividir: %f", dividir);*/
-
+			
 			somnolencia = ((mi_pid % 10) / 2) + 1;
 			printf("## 1 ## Mi somnolencia es: %f, mi pid es: %d\n", somnolencia, mi_pid);
+			sleep(somnolencia);
 		break;
 		default:
 			hijo2 = fork();
@@ -41,13 +52,11 @@ int main(){
 				case 0:
 					/*Hijo 2*/
 					mi_pid = getpid();
-					/*longitud = calcular_longitud(mi_pid);
-					dividir = elevar(10, longitud);
-
-					printf("dividir: %f", dividir);*/
-
+					
 					somnolencia = ((mi_pid % 10) / 2) + 1;
 					printf("## 2 ## Mi somnolencia es: %f, mi pid es: %d\n", somnolencia, mi_pid);
+					sleep(somnolencia);
+
 				break;
 				default:
 					hijo3 = fork();
@@ -58,13 +67,10 @@ int main(){
 						case 0:
 							/*Hijo 3*/
 							mi_pid = getpid();
-							/*longitud = calcular_longitud(mi_pid);
-							dividir = elevar(10, longitud);
-
-							printf("dividir: %f", dividir);*/
-
+							
 							somnolencia = ((mi_pid % 10) / 2) + 1;
 							printf("## 3 ## Mi somnolencia es: %f, mi pid es: %d\n", somnolencia, mi_pid);
+							sleep(somnolencia);
 						break;
 						default:
 							hijo4 = fork();
@@ -75,13 +81,10 @@ int main(){
 								case 0:
 									/*Hijo 4*/
 									mi_pid = getpid();
-									/*longitud = calcular_longitud(mi_pid);
-									dividir = elevar(10, longitud);
-
-									printf("dividir: %f", dividir);*/
-
+									
 									somnolencia = ((mi_pid % 10) / 2) + 1;
 									printf("## 4 ## Mi somnolencia es: %f, mi pid es: %d\n", somnolencia, mi_pid);
+									sleep(somnolencia);
 								break;
 								default:
 
